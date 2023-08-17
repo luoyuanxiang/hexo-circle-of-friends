@@ -36,87 +36,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
+    - name: 检查分支
       uses: actions/checkout@main
 
-    - name: Set up Python
+    - name: 设置Python
       uses: actions/setup-python@main
       with:
         python-version: 3.8
 
-    - name: Install requirements
+    - name: 安装Python依赖
       working-directory: ./hexo_circle_of_friends
       run: |
         pip install -r requirements.txt
 
-    - name: set env
+    - name: 设置环境变量
       run: |
         echo "BASE_PATH=$(pwd)" >> $GITHUB_ENV && echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
 
-    - name: leancloud Update posts # leancloud
-      if: ${{ env.STORAGE_TYPE == 'leancloud' }}
-      env:
-        APPID: ${{ secrets.APPID }}
-        APPKEY: ${{ secrets.APPKEY }}
-        LINK: ${{ secrets.LINK }}
-        PROXY: ${{ secrets.PROXY }}
-      working-directory: ./hexo_circle_of_friends
-      run: |
-        python run.py
-
-    - name: mysql Update posts # mysql
-      if: ${{ env.STORAGE_TYPE == 'mysql' }}
-      env:
-        MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
-        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-        MYSQL_IP: ${{ secrets.MYSQL_IP }}
-        MYSQL_DB: ${{ secrets.MYSQL_DB }}
-      working-directory: ./hexo_circle_of_friends
-      run: |
-        python run.py
-
-    - name: sqlite Update posts # sqlite
-      if: ${{ env.STORAGE_TYPE == 'sqlite' || env.SIMPLE_MODE == 'true' }}
-      env:
-        PYTHONPATH: ${{ env.PYTHONPATH }}
-        SQLITE_DB: ${{ secrets.SQLITE_DB }}
-      run: |
-        python ./hexo_circle_of_friends/run.py
-
-    - name: Push sqlite data # sqlite push
-      if: ${{ env.STORAGE_TYPE == 'sqlite' }}
-      uses: github-actions-x/commit@v2.9
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: "Update data.db"
-        files: data.db
-        rebase: 'true'
-        name: ${{ env.GITHUB_NAME }}
-        email: ${{ env.GITHUB_EMAIL }}
-
-    - name: mongodb Update posts # mongodb
-      if: ${{ env.STORAGE_TYPE == 'mongodb' }}
+    - name: mongodb 更新 文章
       env:
         MONGODB_URI: ${{ secrets.MONGODB_URI }}
       working-directory: ./hexo_circle_of_friends
       run: |
         python run.py
-
-    - name: simple mode transform # 极简模式转换
-      if: ${{ env.SIMPLE_MODE == 'true' }}
-      run: |
-        python ./hexo_circle_of_friends/utils/simple_mode_transform_json.py
-
-    - name: simple mode push # 推送极简模式
-      if: ${{ env.SIMPLE_MODE == 'true' }}
-      uses: github-actions-x/commit@v2.9
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: "Update data.json"
-        files: data.json
-        rebase: 'true'
-        name: github-actions[bot]
-        email: github-actions@noreply.github.com
 
     - name: keep alive
       uses: gautamkrishnar/keepalive-workflow@master # keep workflows from being suspended when no commit for a long time
