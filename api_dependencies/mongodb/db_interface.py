@@ -14,7 +14,7 @@ class MongoEngine(object):
     @staticmethod
     def __get_mongo_engine():
         if scrapy_conf.DEBUG:
-            URI = "mongodb+srv://yyyz:etmTvVcvOGlSINSm@cluster0.c6dgw.mongodb.net/?retryWrites=true&w=majority"
+            URI = "mongodb+srv://luoyuanxiang:luoyuanxiang@cluster0.do4is2x.mongodb.n/?retryWrites=true&w=majority"
         else:
             URI = os.environ.get("MONGODB_URI")
         client = MongoClient(URI)

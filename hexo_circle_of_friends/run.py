@@ -118,6 +118,7 @@ def initsettings(settings, user_conf):
     elif db == 'mysql' or db == "sqlite":
         settings["ITEM_PIPELINES"]["hexo_circle_of_friends.pipelines.sql_pipe.SQLPipeline"] = 300
     elif db == "mongodb":
+        logger.info("使用mongodb")
         settings["ITEM_PIPELINES"]["hexo_circle_of_friends.pipelines.mongodb_pipe.MongoDBPipeline"] = 300
 
     setting_friends = user_conf["SETTINGS_FRIENDS_LINKS"]

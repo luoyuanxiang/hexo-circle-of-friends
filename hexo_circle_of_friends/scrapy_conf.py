@@ -3,7 +3,7 @@ VERSION = "5.0.8"
 
 # debug
 # debug模式
-DEBUG = False
+DEBUG = True
 
 # lc
 # debug模式使用
@@ -23,6 +23,7 @@ HTTP_PROXY_URL = ""
 #     "https://www.zyoushuo.cn/friends/",  # volantis
 # ]
 FRIENDPAGE_LINK = [
+    "https://luoyuanxiang.top/social/link/"
 ]
 
 BOT_NAME = 'hexo_circle_of_friends'
