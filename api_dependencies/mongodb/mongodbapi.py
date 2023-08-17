@@ -55,7 +55,7 @@ def query_all(list, start: int = 0, end: int = -1, rule: str = "updated"):
 def query_friend():
     session = db_interface.db_init()
     friend_db_collection = session.Friend
-    friends = friend_db_collection.find({}, {"_id": 0, "createdAt": 0, "error": 0})
+    friends = friend_db_collection.find({}, {"_id": 0, "createdAt": 0})
     friend_list_json = []
     if friends:
         for friend in friends:
